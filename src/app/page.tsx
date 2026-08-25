@@ -3,8 +3,8 @@ import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <main className={styles.page}>
-      <section className={styles.checkCard}>
+    <section className={styles.page}>
+      <div className={styles.checkCard}>
         <span className={styles.status}>
           <CircleCheck aria-hidden="true" size={18} strokeWidth={2} />
           Base técnica lista
@@ -14,7 +14,7 @@ export default function Home() {
           Next.js, las tipografías, las variables de color y CSS Modules están
           configurados correctamente.
         </p>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

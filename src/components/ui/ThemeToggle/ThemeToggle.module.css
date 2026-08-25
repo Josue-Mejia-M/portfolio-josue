@@ -1,0 +1,53 @@
+.toggle {
+  width: 100%;
+  padding: 12px var(--space-2);
+  color: var(--sidebar-text-muted);
+  background: transparent;
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.toggle:hover {
+  color: var(--sidebar-text);
+  background: var(--sidebar-surface);
+  border-color: var(--sidebar-text-muted);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--sidebar-focus);
+  outline-offset: 2px;
+}
+
+.lightTheme,
+.darkTheme {
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.lightTheme {
+  display: flex;
+}
+
+.darkTheme {
+  display: none;
+}
+
+.lightTheme svg,
+.darkTheme svg {
+  color: var(--sidebar-accent);
+  transition: color 180ms ease;
+}
+
+:global([data-theme="dark"]) .lightTheme {
+  display: none;
+}
+
+:global([data-theme="dark"]) .darkTheme {
+  display: flex;
+}

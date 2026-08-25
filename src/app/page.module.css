@@ -1,5 +1,5 @@
 .page {
-  min-height: 100vh;
+  min-height: calc(100vh - (var(--space-6) * 2));
   display: grid;
   place-items: center;
   padding: var(--space-4);
@@ -8,10 +8,15 @@
 .checkCard {
   width: min(100%, 620px);
   padding: var(--space-5);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  background: var(--color-surface);
+  background: var(--surface);
   box-shadow: var(--shadow-soft);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .checkCard h1 {
@@ -24,15 +29,17 @@
 
 .checkCard p {
   margin-top: var(--space-2);
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
   line-height: 1.7;
+  transition: color 200ms ease;
 }
 
 .status {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  color: var(--color-accent);
+  color: var(--accent);
   font-size: 0.875rem;
   font-weight: 600;
+  transition: color 200ms ease;
 }
