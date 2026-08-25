@@ -32,8 +32,8 @@
   aspect-ratio: 1;
   place-items: center;
   color: var(--avatar-text);
-  background: var(--sidebar-accent);
-  border: 1px solid rgb(255 249 242 / 24%);
+  background: var(--avatar-background);
+  border: 1px solid var(--avatar-border);
   border-radius: 50%;
   box-shadow: var(--shadow-soft);
   font-family: var(--font-dm-serif-display), Georgia, serif;
@@ -88,18 +88,18 @@
 
 .link:hover {
   color: var(--sidebar-text);
-  background: var(--sidebar-surface);
+  background: var(--navigation-hover);
   border-color: var(--sidebar-border);
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--sidebar-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
 .active {
   color: var(--sidebar-text);
-  background: var(--sidebar-surface);
+  background: var(--navigation-active);
   border-color: var(--sidebar-border);
   box-shadow: inset 3px 0 0 var(--sidebar-accent);
 }

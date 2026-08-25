@@ -15,12 +15,12 @@
 
 .toggle:hover {
   color: var(--sidebar-text);
-  background: var(--sidebar-surface);
+  background: var(--theme-button-hover);
   border-color: var(--sidebar-text-muted);
 }
 
 .toggle:focus-visible {
-  outline: 2px solid var(--sidebar-focus);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
