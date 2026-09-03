@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { DM_Serif_Display, Inter } from "next/font/google";
-import { AppShell } from "@/components/layout/AppShell/AppShell";
 import "./globals.css";
 
 const themeInitializationScript = `
@@ -55,9 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
       </head>
-      <body>
-        <AppShell>{children}</AppShell>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
