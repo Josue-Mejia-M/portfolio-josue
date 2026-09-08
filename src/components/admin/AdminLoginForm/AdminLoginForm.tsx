@@ -1,26 +1,41 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from "react";
+import { unstable_rethrow } from "next/navigation";
+import { loginAdmin, type AdminLoginState } from "@/app/(admin)/admin/login/actions";
 import styles from "./AdminLoginForm.module.css";
 
 type FieldErrors = { email?: string; password?: string };
-type AdminLoginFormProps = {
-  isSubmitting?: boolean;
-  generalError?: string;
-};
-
-export function AdminLoginForm({
-  isSubmitting = false,
-  generalError = "",
-}: AdminLoginFormProps) {
+export function AdminLoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [message, setMessage] = useState("");
+  const submissionLock = useRef(false);
+  const [state, submitAction, isSubmitting] = useActionState<AdminLoginState, FormData>(
+    async (previousState, formData) => {
+      try {
+        const result = await loginAdmin(previousState, formData);
+        setErrors(result.fieldErrors ?? {});
+        return result;
+      } catch (error) {
+        unstable_rethrow(error);
+        return { message: "No se pudo completar la solicitud. Comprueba tu conexión e inténtalo de nuevo." };
+      } finally {
+        submissionLock.current = false;
+      }
+    },
+    { message: "" },
+  );
+
+  useEffect(() => {
+    if (isSubmitting) return;
+    if (state.fieldErrors?.email) emailRef.current?.focus();
+    else if (state.fieldErrors?.password) passwordRef.current?.focus();
+  }, [state, isSubmitting]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (isSubmitting) return;
+    if (isSubmitting || submissionLock.current) return;
 
     const email = emailRef.current!;
     const password = passwordRef.current!;
@@ -36,13 +51,15 @@ export function AdminLoginForm({
     }
 
     setErrors(nextErrors);
-    setMessage("");
     if (nextErrors.email) {
       email.focus();
     } else if (nextErrors.password) {
       password.focus();
     } else {
-      setMessage("El inicio de sesión estará disponible próximamente.");
+      // Capture values before disabling inputs; keep the password unchanged.
+      const formData = new FormData(event.currentTarget);
+      submissionLock.current = true;
+      startTransition(() => submitAction(formData));
     }
   }
 
@@ -53,6 +70,7 @@ export function AdminLoginForm({
         <input
           ref={emailRef}
           id="admin-email"
+          name="email"
           type="email"
           autoComplete="username"
           required
@@ -67,6 +85,7 @@ export function AdminLoginForm({
         <input
           ref={passwordRef}
           id="admin-password"
+          name="password"
           type="password"
           autoComplete="current-password"
           required
@@ -76,11 +95,10 @@ export function AdminLoginForm({
         />
         <p id="admin-password-error" className={styles.error} aria-live="polite">{errors.password}</p>
       </div>
-      <p className={styles.error} role="alert" aria-atomic="true">{generalError}</p>
+      <p className={styles.error} role="alert" aria-atomic="true">{isSubmitting ? "" : state.message}</p>
       <button className={styles.submit} type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Iniciando sesión…" : "Iniciar sesión"}
       </button>
-      <p className={styles.message} role="status" aria-atomic="true">{message}</p>
     </form>
   );
 }
