@@ -1,0 +1,53 @@
+.main {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: var(--space-3);
+}
+
+.card {
+  width: min(100%, 440px);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  overflow-wrap: anywhere;
+}
+
+.title {
+  font-family: var(--font-dm-serif-display), Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.description {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-4);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: var(--space-2);
+  color: var(--accent-text);
+  border-radius: var(--radius-button);
+}
+
+.back:hover { text-decoration: underline; }
+
+.back:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .main, .card { padding: var(--space-2); }
+}
