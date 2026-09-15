@@ -21,7 +21,8 @@ export async function createClient() {
             cookieStore.set(name, value, options);
           });
         } catch {
-          // A future authentication proxy will manage session updates when Server Components cannot write cookies.
+          // Server Components cannot write cookies. proxy.ts refreshes the
+          // session before they render and persists the resulting cookies.
         }
       },
     },

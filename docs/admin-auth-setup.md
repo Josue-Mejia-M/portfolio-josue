@@ -1,6 +1,6 @@
 # Preparación manual del acceso administrativo
 
-Esta tarea conecta `/admin/login`. **El login no protege por sí solo el acceso directo a `/admin` ni a `/admin/proyectos`.** La protección general de rutas y la renovación automática de sesión quedan pendientes. El botón general «Cerrar sesión» sigue inactivo. Las políticas RLS existentes no se modifican.
+Esta tarea conecta `/admin/login` y protege server-side `/admin` y `/admin/proyectos`. El `proxy.ts` renueva las cookies de sesión mediante `@supabase/ssr` antes de cada solicitud administrativa; `requireAdmin()` continúa comprobando en el servidor que `app_metadata.role === "admin"`. El botón general «Cerrar sesión» invalida la sesión local y redirige a `/admin/login`. Las políticas RLS existentes no se modifican.
 
 ## Configuración de Auth
 
@@ -26,12 +26,14 @@ El propietario debe realizar estas operaciones manualmente, fuera de la aplicaci
 
 Si eliges la API administrativa, ejecútala en una herramienta privada fuera del repositorio, del navegador y del despliegue de la aplicación. Obtén la credencial privilegiada desde el gestor privado de secretos del propietario; úsala solo en ese proceso, con persistencia y renovación de sesión desactivadas. No la pegues en el chat, código, historial de comandos, logs, archivos `.env` de la aplicación ni migraciones. No imprimas respuestas completas, contraseñas o sesiones. Comprueba los errores sin volcarlos y retira la credencial del proceso al terminar. Esta guía no ejecuta operaciones remotas ni contiene credenciales o identificadores reales.
 
-## Pruebas manuales pendientes con Supabase
+## Pruebas manuales con Supabase
 
 - Administrador válido: iniciar sesión desde `/admin/login` y llegar exclusivamente a `/admin`.
+- Cerrar sesión: usar «Cerrar sesión», comprobar la redirección a `/admin/login` y que una navegación posterior a `/admin` o `/admin/proyectos` vuelve al login.
+- Sesión expirada: con una sesión de prueba expirada, navegar directamente a `/admin` o `/admin/proyectos`; el proxy y la guardia server-side deben terminar en `/admin/login`, sin renderizar el panel.
 - Contraseña incorrecta: permanecer en el login con un mensaje genérico de credenciales/permisos.
 - Usuario autenticado sin marcador admin: permanecer en el login con el mismo mensaje genérico y verificar que se eliminan las cookies de su sesión local. Usar una cuenta de prueba ya disponible en un entorno de pruebas; las pruebas automáticas no crean cuentas. El cierre usa `scope: "local"` y comprueba su resultado; si falla, se informa que no se pudo completar, sin redirigir. Véase [cierre de sesión](https://supabase.com/docs/guides/auth/signout).
 - Envío: comprobar «Iniciando sesión…», controles deshabilitados y ausencia de envíos duplicados; tras un error, recuperar controles y poder reintentar. Comprobar mensajes por campo y foco en el primer campo inválido.
 - Simular desconexión y límite de intentos en un entorno de pruebas, sin provocar bloqueos en producción: mensajes comprensibles, sin detalles internos.
 
-Las pruebas locales con dobles de Supabase validan decisiones y llamadas, pero no prueban las credenciales, la configuración remota ni la persistencia real de cookies SSR. La renovación de sesión y la autorización de cada futura ruta/operación necesitan su propia implementación.
+Las pruebas locales con dobles de Supabase validan decisiones y llamadas, pero no prueban las credenciales, la configuración remota ni la persistencia real de cookies SSR. Cada nueva ruta o mutación administrativa debe reutilizar `requireAdmin()`; el proxy solo renueva la sesión, no concede permisos por rol.

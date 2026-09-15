@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight, FolderKanban, House, LogOut } from "lucide-react";
+import { logoutAdmin } from "@/app/(admin)/admin/(panel)/actions";
 import styles from "./AdminShell.module.css";
 
 type AdminShellProps = {
@@ -18,10 +19,12 @@ export function AdminShell({ children }: AdminShellProps) {
               Ver portafolio
               <ArrowUpRight aria-hidden="true" size={20} strokeWidth={1.8} />
             </Link>
-            <button className={styles.logout} type="button" disabled>
-              <LogOut aria-hidden="true" size={20} strokeWidth={1.8} />
-              Cerrar sesión
-            </button>
+            <form action={logoutAdmin}>
+              <button className={styles.logout} type="submit">
+                <LogOut aria-hidden="true" size={20} strokeWidth={1.8} />
+                Cerrar sesión
+              </button>
+            </form>
           </div>
         </div>
       </header>

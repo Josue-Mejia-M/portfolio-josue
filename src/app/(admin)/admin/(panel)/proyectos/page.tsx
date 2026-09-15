@@ -1,4 +1,8 @@
-export default function AdminProyectosPage() {
+import { requireAdmin } from "@/lib/supabase/admin";
+
+export default async function AdminProyectosPage() {
+  await requireAdmin();
+
   return (
     <section>
       <h1>Proyectos</h1>
