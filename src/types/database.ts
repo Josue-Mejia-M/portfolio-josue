@@ -1,3 +1,9 @@
+/**
+ * Contrato TypeScript del esquema público consumido por la aplicación.
+ * Las migraciones de `supabase/migrations` son la fuente de verdad: tras un
+ * cambio de esquema, este archivo debe regenerarse o actualizarse y revisarse
+ * junto con ese cambio. Véase `docs/supabase-types.md` para el procedimiento.
+ */
 export type ProjectType = "personal" | "academic" | "professional";
 
 export type DevelopmentStatus =

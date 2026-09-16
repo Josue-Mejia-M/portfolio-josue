@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { NavigationItem } from "@/types/navigation";
 
+/** Menú público centralizado; sus destinos deben pertenecer al conjunto cerrado de `NavigationItem`. */
 export const navigationItems: NavigationItem[] = [
   { label: "Inicio", href: "/", icon: House },
   { label: "Sobre mí", href: "/sobre-mi", icon: UserRound },

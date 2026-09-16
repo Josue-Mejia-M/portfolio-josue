@@ -6,11 +6,16 @@ import { redirect } from "next/navigation";
 import { createClient } from "./server";
 
 /**
- * Verifies the current request belongs to the portfolio administrator.
+ * Autoriza la solicitud actual únicamente cuando Supabase devuelve un usuario
+ * cuyo `app_metadata.role` es exactamente `"admin"`.
  *
- * Server Actions and data access code must call this again before performing
- * an administrative operation; rendering a protected layout is not enough to
- * authorize a mutation.
+ * La redirección no retorna: sesiones ausentes, inválidas y cualquier otro rol
+ * terminan en `/admin/login`. `cache` memoriza el resultado durante el render
+ * actual para no repetir la consulta, pero no sustituye RLS ni la verificación
+ * junto a cada mutación o acceso administrativo a datos.
+ *
+ * @returns El usuario autenticado y verificado como administrador.
+ * @throws Redirección de Next.js a `/admin/login` si no se autoriza la solicitud.
  */
 export const requireAdmin = cache(async () => {
   const supabase = await createClient();

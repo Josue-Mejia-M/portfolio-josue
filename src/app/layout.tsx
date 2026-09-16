@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DM_Serif_Display, Inter } from "next/font/google";
 import "./globals.css";
 
+// Se ejecuta antes de pintar para que la preferencia persistida no produzca un
+// destello del tema contrario. Es estático: no incorpora entrada de usuario.
 const themeInitializationScript = `
   (function () {
     var theme = "light";
@@ -48,6 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es"
       data-theme="light"
+      // El script anterior puede cambiar `data-theme` antes de la hidratación.
       suppressHydrationWarning
       className={`${inter.variable} ${dmSerifDisplay.variable}`}
     >

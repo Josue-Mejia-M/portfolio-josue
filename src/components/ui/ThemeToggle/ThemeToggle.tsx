@@ -6,13 +6,19 @@ import styles from "./ThemeToggle.module.css";
 
 type Theme = "light" | "dark";
 
+/** Clave estable que comparte la preferencia con el script del layout raíz. */
 const STORAGE_KEY = "portfolio-theme";
 const THEME_CHANGE_EVENT = "portfolio-theme-change";
 
+/** Lee el tema ya aplicado al documento; es la fuente observada por la UI. */
 function getDocumentTheme(): Theme {
   return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
 }
 
+/**
+ * Resuelve la preferencia: `localStorage` tiene prioridad sobre la preferencia
+ * del sistema y, si las API del navegador no están disponibles, usa claro.
+ */
 function getPreferredTheme(): Theme {
   try {
     const storedTheme = localStorage.getItem(STORAGE_KEY);
@@ -31,16 +37,23 @@ function getPreferredTheme(): Theme {
   return "light";
 }
 
+/** Valor SSR determinista que evita depender de APIs exclusivas del navegador. */
 function getServerTheme(): Theme {
   return "light";
 }
 
+/** Suscribe `useSyncExternalStore` al evento que anuncia cambios del documento. */
 function subscribeToThemeChange(onStoreChange: () => void) {
   window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
 
   return () => window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
 }
 
+/**
+ * Alterna y persiste el tema del documento. `useSyncExternalStore` sincroniza
+ * el botón con la fuente externa (`data-theme`) y el evento personalizado
+ * notifica cambios sin convertir el tema en un estado React duplicado.
+ */
 export function ThemeToggle() {
   const theme = useSyncExternalStore(
     subscribeToThemeChange,

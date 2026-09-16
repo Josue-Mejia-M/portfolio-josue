@@ -1,6 +1,10 @@
--- Helper functions
+-- Crea `projects` y sus invariantes de dominio. Las restricciones mantienen
+-- datos válidos incluso si una futura interfaz omite validaciones de cliente.
+-- Las rutas de imágenes se validan aquí; las reglas de acceso a sus objetos se
+-- definen por separado en la migración de Storage.
 begin;
 
+-- Valida tamaño, contenido y unicidad normalizada de las tecnologías.
 create function public.are_project_technologies_valid(technologies_value text[])
 returns boolean
 language sql
@@ -22,6 +26,7 @@ as $$
     );
 $$;
 
+-- Centraliza la actualización de `updated_at` para toda modificación de fila.
 create function public.set_projects_updated_at()
 returns trigger
 language plpgsql
@@ -33,7 +38,6 @@ begin
 end;
 $$;
 
--- Table
 create table public.projects (
   id uuid primary key default gen_random_uuid(),
   title text not null,
@@ -86,8 +90,11 @@ create table public.projects (
     check (live_url is null or live_url ~ '^https://[^[:space:]]+$'),
   constraint projects_display_order_check
     check (display_order >= 0),
+  -- Un destacado no puede ocultar un borrador de la lista pública.
   constraint projects_featured_requires_published_check
     check (not is_featured or publication_status = 'published'),
+  -- Publicar exige las tres variantes de imagen y tecnologías para que la
+  -- presentación pública no dependa de datos incompletos.
   constraint projects_published_content_check
     check (
       publication_status = 'draft'
@@ -103,7 +110,7 @@ create table public.projects (
     )
 );
 
--- Indexes
+-- Solo puede existir un proyecto destacado a la vez.
 create unique index projects_single_featured_idx
   on public.projects (is_featured)
   where is_featured;
@@ -111,7 +118,6 @@ create unique index projects_single_featured_idx
 create index projects_public_listing_idx
   on public.projects (publication_status, display_order asc, created_at desc, id);
 
--- Trigger
 create trigger projects_set_updated_at
 before update on public.projects
 for each row

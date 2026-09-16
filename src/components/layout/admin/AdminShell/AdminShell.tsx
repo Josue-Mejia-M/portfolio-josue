@@ -8,6 +8,11 @@ type AdminShellProps = {
   children: ReactNode;
 };
 
+/**
+ * Marco de las rutas administrativas ya autorizadas. Mantiene su navegación y
+ * el formulario de cierre aislados del shell público; `logoutAdmin` realiza la
+ * verificación definitiva antes de invalidar una sesión.
+ */
 export function AdminShell({ children }: AdminShellProps) {
   return (
     <div className={styles.shell}>

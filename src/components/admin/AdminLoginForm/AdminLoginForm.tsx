@@ -6,6 +6,12 @@ import { loginAdmin, type AdminLoginState } from "@/app/(admin)/admin/login/acti
 import styles from "./AdminLoginForm.module.css";
 
 type FieldErrors = { email?: string; password?: string };
+
+/**
+ * Formulario cliente que valida lo inmediato, coordina `loginAdmin` y presenta
+ * sus errores. La acción de servidor conserva la validación y autorización
+ * definitivas; esta capa solo mejora la respuesta y accesibilidad del cliente.
+ */
 export function AdminLoginForm() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -18,6 +24,8 @@ export function AdminLoginForm() {
         setErrors(result.fieldErrors ?? {});
         return result;
       } catch (error) {
+        // Las redirecciones de Next son control de flujo, no errores de red;
+        // reenviarlas permite que el acceso autorizado llegue a `/admin`.
         unstable_rethrow(error);
         return { message: "No se pudo completar la solicitud. Comprueba tu conexión e inténtalo de nuevo." };
       } finally {
@@ -35,6 +43,8 @@ export function AdminLoginForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // El estado de React no se actualiza de forma síncrona; la ref cubre dos
+    // eventos consecutivos antes de que `isSubmitting` pase a `true`.
     if (isSubmitting || submissionLock.current) return;
 
     const email = emailRef.current!;
@@ -56,7 +66,8 @@ export function AdminLoginForm() {
     } else if (nextErrors.password) {
       password.focus();
     } else {
-      // Capture values before disabling inputs; keep the password unchanged.
+      // Se capturan valores antes de deshabilitar controles y no se normaliza
+      // la contraseña: modificarla cambiaría la credencial enviada a Auth.
       const formData = new FormData(event.currentTarget);
       submissionLock.current = true;
       startTransition(() => submitAction(formData));

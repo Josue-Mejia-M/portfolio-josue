@@ -5,7 +5,19 @@ import type { Database } from "@/types/database";
 
 import { supabasePublishableKey, supabaseUrl } from "./config";
 
-/** Refreshes the cookie session before an admin request reaches the app. */
+/**
+ * Sincroniza la sesión SSR de Supabase con la solicitud y la respuesta antes
+ * de renderizar una ruta administrativa. No determina si el usuario posee el
+ * rol `admin`; esa autorización corresponde a `requireAdmin` y a las RLS.
+ *
+ * `getAll` entrega a Supabase las cookies recibidas. Cuando Supabase las
+ * renueva, `setAll` actualiza tanto la solicitud en curso como la respuesta
+ * saliente para que el render y la siguiente navegación observen la sesión.
+ *
+ * @param request Solicitud de Next.js interceptada por `proxy.ts`.
+ * @returns Una respuesta de continuación con la sesión actualizada, o una
+ * redirección a `/admin/login` si no hay claims para una ruta protegida.
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -27,13 +39,14 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // This must immediately follow createServerClient. It renews an expiring
-  // session and synchronizes its cookies with the request and response.
+  // Debe ejecutarse inmediatamente: Supabase puede renovar una sesión próxima
+  // a expirar y `setAll` debe propagar esas cookies antes del renderizado.
   const { data } = await supabase.auth.getClaims();
 
   if (request.nextUrl.pathname !== "/admin/login" && !data?.claims) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/admin/login";
+    // No se conserva una query arbitraria al entrar al login.
     loginUrl.search = "";
 
     const response = NextResponse.redirect(loginUrl);

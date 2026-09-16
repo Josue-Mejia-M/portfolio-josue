@@ -5,6 +5,7 @@ type PublicLayoutProps = {
   children: ReactNode;
 };
 
+/** Agrupa las rutas públicas bajo su shell, sin afectar la URL final. */
 export default function PublicLayout({ children }: PublicLayoutProps) {
   return <AppShell>{children}</AppShell>;
 }

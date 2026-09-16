@@ -11,6 +11,10 @@ type AdminPanelLayoutProps = {
   children: ReactNode;
 };
 
+/**
+ * Define los metadatos y la exclusión de indexación del área `/admin` sin
+ * protegerla todavía; la protección pertenece al layout anidado del panel.
+ */
 export default function AdminPanelLayout({ children }: AdminPanelLayoutProps) {
   return children;
 }

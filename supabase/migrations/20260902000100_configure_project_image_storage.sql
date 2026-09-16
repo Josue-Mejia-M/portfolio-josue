@@ -1,3 +1,6 @@
+-- Configura el bucket público de imágenes y sus RLS. La lectura permite servir
+-- imágenes públicas; la escritura exige administración y la
+-- convención `<slug>/(desktop|tablet|mobile).<extensión>`.
 begin;
 
 insert into storage.buckets (

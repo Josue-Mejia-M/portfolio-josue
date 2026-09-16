@@ -1,3 +1,6 @@
+-- Añade el acceso administrativo a `projects`. El rol PostgreSQL
+-- `authenticated` solo identifica una sesión; cada política exige además el
+-- marcador exacto `app_metadata.role = 'admin'` emitido en el JWT.
 begin;
 
 alter table public.projects enable row level security;

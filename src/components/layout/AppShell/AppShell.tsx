@@ -6,6 +6,7 @@ type AppShellProps = {
   children: ReactNode;
 };
 
+/** Compone el marco visual exclusivo del portafolio público y su navegación. */
 export function AppShell({ children }: AppShellProps) {
   return (
     <div className={styles.shell}>

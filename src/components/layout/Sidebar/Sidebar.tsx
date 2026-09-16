@@ -6,6 +6,11 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle/ThemeToggle";
 import { navigationItems } from "@/data/navigation";
 import styles from "./Sidebar.module.css";
 
+/**
+ * Navegación cliente del portafolio. Marca activo únicamente el enlace cuyo
+ * `href` coincide exactamente con la ruta actual, evitando activar secciones
+ * hermanas por coincidencias de prefijo.
+ */
 export function Sidebar() {
   const pathname = usePathname();
 

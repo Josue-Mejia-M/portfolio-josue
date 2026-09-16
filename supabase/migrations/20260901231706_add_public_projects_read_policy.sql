@@ -1,3 +1,5 @@
+-- Habilita RLS y permite el listado público exclusivamente de proyectos ya
+-- publicados. Los usuarios administrativos reciben una política adicional.
 begin;
 
 alter table public.projects enable row level security;

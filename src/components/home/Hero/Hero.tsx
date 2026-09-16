@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Code2, Download, Server } from "lucide-react";
 import styles from "./Hero.module.css";
 
+/** Presenta la portada y enlaza al listado de proyectos y al CV estático. */
 export function Hero() {
   return (
     <section className={styles.hero} aria-labelledby="hero-title">

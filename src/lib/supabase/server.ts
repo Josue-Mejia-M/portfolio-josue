@@ -7,6 +7,14 @@ import type { Database } from "@/types/database";
 
 import { supabasePublishableKey, supabaseUrl } from "./config";
 
+/**
+ * Crea un cliente SSR tipado y vinculado a las cookies de la solicitud actual.
+ * `server-only` impide importarlo en el navegador. En un Server Component las
+ * cookies no pueden escribirse; el `catch` conserva el render y delega la
+ * renovación persistente a `proxy.ts`, que se ejecuta antes en rutas admin.
+ *
+ * @returns Cliente de Supabase asociado al almacén de cookies actual.
+ */
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -21,8 +29,8 @@ export async function createClient() {
             cookieStore.set(name, value, options);
           });
         } catch {
-          // Server Components cannot write cookies. proxy.ts refreshes the
-          // session before they render and persists the resulting cookies.
+          // Los Server Components no escriben cookies. `proxy.ts` renueva la
+          // sesión antes del render y persiste las cookies resultantes.
         }
       },
     },
