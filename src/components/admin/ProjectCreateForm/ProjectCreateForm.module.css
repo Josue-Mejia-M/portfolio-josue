@@ -82,6 +82,30 @@
   line-height: 1.6;
 }
 
+/* Reserva espacio para errores de campo y evita que el formulario salte al validar. */
+.error {
+  min-height: 1.25rem;
+  margin: 0;
+  color: #b42318;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Diferencia la validación correcta del aviso general sin sugerir persistencia. */
+.success {
+  margin: 0;
+  color: #087443;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* El mismo atributo ARIA que comunica el error también proporciona señal visual. */
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: #b42318;
+}
+
 /* Etiquetas locales de tecnologías: no representan datos persistidos todavía. */
 .technologyList {
   display: flex;

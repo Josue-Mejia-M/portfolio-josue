@@ -11,7 +11,7 @@ export default async function AdminNuevoProyectoPage() {
   return (
     <section>
       <h1>Crear proyecto</h1>
-      <p>Completa la información del proyecto. El guardado se habilitará en una tarea posterior.</p>
+      <p>Completa la información del proyecto. Por ahora, el formulario solo valida los datos en el servidor.</p>
       <ProjectCreateForm />
     </section>
   );
