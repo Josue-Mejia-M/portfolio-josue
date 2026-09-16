@@ -1,0 +1,205 @@
+/* Distribución vertical del formulario y sus grupos semánticos. */
+.form {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.section {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.section legend {
+  padding-inline: var(--space-1);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Dos columnas para campos relacionados; las capturas definen luego tres. */
+.grid,
+.captureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.field label,
+.checkbox {
+  font-weight: 600;
+}
+
+/* Controles con área táctil mínima y apariencia coherente con el panel. */
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: var(--text-primary);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Mantiene los ejemplos legibles en los dos temas del panel. */
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+/* El foco visible permite recorrer todos los controles con teclado. */
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible,
+.checkbox input:focus-visible,
+.technologyList button:focus-visible,
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.help,
+.notice,
+.capture p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Etiquetas locales de tecnologías: no representan datos persistidos todavía. */
+.technologyList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.technologyList li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 4px 4px 10px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: var(--radius-button);
+}
+
+.technologyList button {
+  min-height: 32px;
+  padding-inline: 8px;
+  color: var(--accent-text);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.technologyList button:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+/* Marcadores informativos de los campos que se conectarán a Storage después. */
+.captureGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.capture {
+  padding: var(--space-2);
+  background: var(--background);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-button);
+}
+
+.capture h2 {
+  font-size: 1rem;
+}
+
+.capture p {
+  margin-top: var(--space-1);
+  font-size: 0.875rem;
+}
+
+.capture code {
+  overflow-wrap: anywhere;
+}
+
+/* Acciones visuales: el formulario aún no inicia una operación de creación. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-button);
+  font-weight: 600;
+}
+
+.primaryAction {
+  color: var(--surface);
+  background: var(--accent-text);
+  border: 1px solid var(--accent-text);
+  cursor: pointer;
+}
+
+.primaryAction:hover {
+  filter: brightness(0.94);
+}
+
+.secondaryAction {
+  color: var(--accent-text);
+  border: 1px solid var(--border);
+}
+
+.secondaryAction:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.notice {
+  font-size: 0.875rem;
+}
+
+/* Evita comprimir los controles cuando el panel dispone de poco ancho. */
+@media (max-width: 700px) {
+  .grid,
+  .captureGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,5 +1,6 @@
 import { listAdminProjects } from "@/features/projects/admin-queries";
 import { requireAdmin } from "@/lib/supabase/admin";
+import Link from "next/link";
 
 import styles from "./page.module.css";
 
@@ -14,8 +15,16 @@ export default async function AdminProyectosPage() {
 
   return (
     <section className={styles.section}>
-      <h1>Proyectos</h1>
-      <p>Consulta el estado y el orden de los proyectos del portafolio.</p>
+      <div className={styles.header}>
+        <div>
+          <h1>Proyectos</h1>
+          <p>Consulta el estado y el orden de los proyectos del portafolio.</p>
+        </div>
+        {/* Navegación a la UI de alta; no modifica ningún proyecto existente. */}
+        <Link className={styles.create} href="/admin/proyectos/nuevo">
+          Crear proyecto
+        </Link>
+      </div>
 
       {/* La ausencia de filas es un estado válido, distinto de un error. */}
       {projects.length === 0 ? (
